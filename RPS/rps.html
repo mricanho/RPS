@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <meta charset="UTF-8">
+    <title>ROCK, PAPER, SCISSORS</title>
+  <meta name="Miguel Ricanho" content="Rock, paper, scissors exercize">
+  <link rel="stylesheet" href="style.css">
+
+   </head>
+  <body>
+      <header>
+          <h1>RPS Karenchita's edition</h1>
+      </header>
+
+      <p id="action-message">Choose one</p>
+
+      <div class="result">
+        <p>Let's Play!</p>
+        <div id="game-over">
+            <p>Game Over.</p>
+            
+        </div>
+
+
+      <div class= "options">
+          <div id="r" class="option">
+              <img src="./images/rock.png" alt="">
+          </div>
+
+          <div id="p" class="option">
+              <img src="./images/Paper.png" alt="">
+          </div>
+
+          <div id="s" class="option">
+              <img src="./images/scissors.png" alt="">
+          </div>
+
+           
+      </div>
+
+      <div class="score">
+
+        <div id="player-label" class="badge">Player</div>
+        <div id="comp-label"class="badge">Computer</div>
+        <span id="player-score">0</span>:<span id="computer-score">0</span>
+
+      </div>
+
+      
+    
+
+
+
+
+      
+      <script>
+          let playerScore= 0;
+          let computerScore= 0;
+          let player = prompt("What is your name?");          
+          const welcomeMessage= alert("Easy instructions: choose one of the options and pray to the goods you win the game! First 5 goals, wins the game");
+          const playerScore_span= document.getElementById("player-score");
+          const computerScore_span= document.getElementById("computer-score");
+          const score_div = document.getElementById('.score');
+          const result_p = document.querySelector('.result > p');          
+          const rock_div = document.getElementById('r');
+          const paper_div = document.getElementById('p');
+          const scissors_div = document.getElementById('s');
+          const actionMessage_p = document.querySelector('#action-message');
+          const gameOver_div = document.getElementById("game-over");
+
+          function getComputerChoice() {
+              const choices = ["r" , "p" , "s"];
+              const randomNumber = Math.floor(Math.random() * choices.length);
+              return choices[randomNumber];
+          }
+
+          function convertToWord(letter) {
+              if (letter === 'r') return "Rock";
+              if (letter === 'p') return "Paper";
+              return 'Scissors';
+          }
+          
+         
+
+          function win(playerChoice, computerChoice) {
+              const smallPlayerWord = player.fontsize(4).sub();
+              const smallCompWord = 'computer'.fontsize(4).sub();
+              const playerChoice_div = document.getElementById(playerChoice);
+              playerScore++;
+              playerScore_span.innerHTML = playerScore;
+              computerScore_span.innerHTML = computerScore;
+              result_p.innerHTML = `${convertToWord(playerChoice)}${smallPlayerWord} beats ${convertToWord(computerChoice)}${smallCompWord}. YOU WIN! You Lucky Bastard`;
+              document.getElementById(playerChoice).classList.add("green-glow");
+                setTimeout(() => playerChoice_div.classList.remove("green-glow"), 900)
+            
+          }
+
+          function lose(playerChoice, computerChoice) {
+              const smallPlayerWord = player.fontsize(2).sub();
+              const smallCompWord = "computer".fontsize(2).sub();
+              const playerChoice_div = document.getElementById(playerChoice);
+              computerScore++;
+              playerScore_span.innerHTML = playerScore;
+              computerScore_span.innerHTML = computerScore;
+              result_p.innerHTML = `${convertToWord(playerChoice)}${smallPlayerWord} beats ${convertToWord(computerChoice)}${smallCompWord}. YOU LOSE! HAHAHA`;
+              document.getElementById(playerChoice).classList.add("red-glow");
+                setTimeout(() => playerChoice_div.classList.remove("red-glow"), 900)
+          }
+
+          function draw(playerChoice, computerChoice) {
+              const smallPlayerWord = player.fontsize(2).sub();
+              const smallCompWord = "computer".fontsize(2).sub();
+              const playerChoice_div = document.getElementById(playerChoice);
+              result_p.innerHTML = `${convertToWord(playerChoice)}${smallPlayerWord} equals ${convertToWord(computerChoice)}${smallCompWord}. DRAW! Pffft`;
+              document.getElementById(playerChoice).classList.add("gray-glow");
+                setTimeout(() => playerChoice_div.classList.remove("gray-glow"), 900);
+          }
+
+          function game(playerChoice) {
+              const computerChoice = getComputerChoice();
+              switch (playerChoice + computerChoice) {
+                  case "pr":
+                  case "sp":
+                  case "rs":
+                      win(playerChoice, computerChoice);
+                      break;
+                  case "sr": 
+                  case "ps": 
+                  case "rp": 
+                      lose(playerChoice, computerChoice);
+                      break;
+                  case "rr": 
+                  case "pp": 
+                  case "ss": 
+                      draw(playerChoice, computerChoice);
+                      break;
+                    
+              }
+          }
+
+          function main() {
+              rock_div.addEventListener('click', () => {
+                  game("r");
+                  endgame(playerScore, computerScore);
+              }
+              );
+              paper_div.addEventListener('click', () => {
+                  game("p");
+                  endGame(playerScore, computerScore);
+              }
+              );
+              scissors_div.addEventListener('click', () => {
+                  game("s");
+                  endGame(playerScore, computerScore);
+              }
+              );
+            }
+            
+            main();
+
+            function endGame(playerScore, computerScore) {
+                switch (true) {
+                    case (playerScore === 5 || computerScore === 5): 
+                        console.log("Game Over");
+                        gameOver(gameOver_div);
+                        showWinner(playerScore, computerScore)
+                        showResetBtn();
+                        break;
+                    default: 
+                        console.log("Continue Playing");
+                }
+            }
+
+            function gameOver(id) {
+                let endGame = gameOver_div;
+                let hideR = rock_div;
+                let hideP = paper_div;
+                let hideS = scissors_div;
+                let hideActionMessage = actionMessage_p;                
+                if(endGame.style.display == 'block') {
+                    endGame.style.display = 'none';
+                } else {
+                    endGame.style.display = 'block';
+                    hideR.style.visibility = 'hidden';
+                    hideP.style.visibility = 'hidden';
+                    hideS.style.visibility = 'hidden';
+                    hideActionMessage.style.visibility = 'hidden';
+                }
+            }
+            
+
+            function showWinner(playerScore, computerScore) {
+                
+                if (playerScore > computerScore) {
+                    gameOver_div.innerHTML = 'Game Over... <br> Player Wins <br> :(';
+                }  else if (playerScore < computerScore) {
+                    gameOver_div.innerHTML = 'Game Over... <br> Computer Wins <br> HAHAHA!';
+                }
+            }
+
+            function showResetBtn() {
+                let btn = document.createElement('button')
+                btn.innerHTML = "Play Again";
+                btn.classList.add('button-reset');
+                let endGame = gameOver_div;
+                endGame.appendChild(btn);
+                btn.addEventListener('click', resetGame)
+            }
+
+            function resetGame() {
+                location.reload();
+            }
+
+            console.log("hello")
+
+
+
+          
+          
+    
+
+          
+              
+    
+            
+
+        
+    
+
+
+      </script>
+  
+  </body>
+</html>
